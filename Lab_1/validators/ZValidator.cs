@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Lab_1.validation
 {
-    class ZValidator : IArgsValidator
+    class ZValidator : IArgsValidator<int>
     {
         public bool IsValid(int z, out string? errorMessage)
         {

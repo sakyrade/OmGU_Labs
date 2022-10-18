@@ -1,4 +1,4 @@
-﻿using Lab_1.menu_items;
+﻿using Lab_1.menu_tasks;
 
 namespace Lab_1
 {
@@ -6,23 +6,25 @@ namespace Lab_1
     {
         static void Main(string[] args)
         {
-            Menu.AddMenuOption(1, "Hello World!", HelloWorld.PrintHelloWorld);
-            Menu.AddMenuOption(2, new CalcMenuOption());
-            Menu.AddMenuOption(3, new RecursionDateMenuOption());
-
-            int menuOption;
+            Menu menu = new();
+            menu.AddMenuOption(1, "Hello World!", () => Console.WriteLine("Hello World!"));
+            menu.AddMenuOption(2, new CalcTask());
+            menu.AddMenuOption(3, new RecursionDateTask());
+            menu.AddMenuOption(4, new StringsTask());
 
             do
             {
-                Menu.PrintMenu();
+                menu.PrintMenu();
 
-                if (!int.TryParse(Console.ReadLine(), out menuOption))
+                if (!int.TryParse(Console.ReadLine(), out int menuOption))
                 {
                     menuOption = -1;
                     continue;
                 }
+
+                menu.ChoiceMenuOption(menuOption);
             }
-            while (Menu.ChoiceMenuOption(menuOption));
+            while (menu.State);
         }
     }
 }

@@ -4,17 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Lab_1.menu_items
+namespace Lab_1.menu_tasks
 {
-    class DelegateMenuOption : MenuOption
+    delegate void ExecuteHandler();
+    class DelegateTask : Task
     {
         private event ExecuteHandler OnExecute;
-        public DelegateMenuOption(string title, ExecuteHandler handler)
+        public DelegateTask(string title, ExecuteHandler handler)
         {
             Title = title;
             OnExecute += handler;
         }
 
-        public override void Execite() => OnExecute?.Invoke();
+        public override void Execute() => OnExecute?.Invoke();
     }
 }

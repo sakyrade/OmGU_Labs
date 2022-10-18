@@ -8,7 +8,7 @@ namespace Lab_1.safe_readers
 {
     static class ReadDate
     {
-        public static (DateOnly, DateOnly) ReadDatePair(string message)
+        public static (DateOnly, DateOnly) Read(string message)
         {
             Console.Clear();
             Console.WriteLine(message);
@@ -20,7 +20,7 @@ namespace Lab_1.safe_readers
             {
                 Console.WriteLine("The first date cannot be less than or equal to the second date.");
                 Console.ReadKey();
-                return ReadDatePair(message);
+                return Read(message);
             }
 
             return (firstDate, secondDate);

@@ -4,13 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Lab_1.menu_items
+namespace Lab_1.menu_tasks
 {
-    delegate void ExecuteHandler();
-
-    abstract class MenuOption
+    abstract class Task
     {
         public string Title { get; protected set; } = "Title";
-        public abstract void Execite();
+        public abstract void Execute();
     }
 }

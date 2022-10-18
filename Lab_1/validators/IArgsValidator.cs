@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Lab_1.validation
 {
-    interface IArgsValidator
+    interface IArgsValidator<T>
     {
-        bool IsValid(int arg, out string? errorMessage);
+        bool IsValid(T arg, out string? errorMessage);
     }
 }

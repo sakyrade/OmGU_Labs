@@ -9,7 +9,7 @@ namespace Lab_1.safe_readers
 {
     static class ReadFormulaArgs
     {
-        public static int ReadInt(string message)
+        public static int Read(string message)
         {
             Console.Clear();
             Console.Write(message);
@@ -20,37 +20,33 @@ namespace Lab_1.safe_readers
             {
                 Console.WriteLine($"{inputLine} is incorrect.");
                 Console.ReadKey();
-                return ReadInt(message);
+                return Read(message);
             }
 
             return x;
         }
-        public static int Read(string message, IArgsValidator validator)
+        public static int Read(string message, IArgsValidator<int> validator)
         {
-            do
+            Console.Clear();
+            Console.Write(message);
+
+            string? inputLine = Console.ReadLine();
+
+            if (!int.TryParse(inputLine, out int x))
             {
-                Console.Clear();
-                Console.Write(message);
-
-                string? inputLine = Console.ReadLine();
-
-                if (!int.TryParse(inputLine, out int x))
-                {
-                    Console.WriteLine($"{inputLine} is incorrect.");
-                    Console.ReadKey();
-                    continue;
-                }
-
-                if (!validator.IsValid(x, out string? errorMessage))
-                {
-                    Console.WriteLine(errorMessage);
-                    Console.ReadKey();
-                    continue;
-                }
-
-                return x;
+                Console.WriteLine($"{inputLine} is incorrect.");
+                Console.ReadKey();
+                return Read(message, validator);
             }
-            while (true);
+
+            if (!validator.IsValid(x, out string? errorMessage))
+            {
+                Console.WriteLine(errorMessage);
+                Console.ReadKey();
+                return Read(message, validator);
+            }
+
+            return x;
         }
     }
 }
