@@ -10,7 +10,6 @@ namespace Lab_1.safe_readers
     {
         public static (DateOnly, DateOnly) Read(string message)
         {
-            Console.Clear();
             Console.WriteLine(message);
 
             DateOnly firstDate = ReadDateOnly("First date: ");
@@ -20,6 +19,8 @@ namespace Lab_1.safe_readers
             {
                 Console.WriteLine("The first date cannot be less than or equal to the second date.");
                 Console.ReadKey();
+                Console.Clear();
+
                 return Read(message);
             }
 
@@ -36,6 +37,7 @@ namespace Lab_1.safe_readers
 
             Console.WriteLine($"{inputLine} is incorrect.");
             Console.ReadKey();
+            Console.Clear();
 
             return ReadDateOnly(message);
         }

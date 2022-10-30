@@ -17,7 +17,7 @@ namespace Lab_1.safe_readers
 
             if (string.IsNullOrEmpty(inputLine) || string.IsNullOrWhiteSpace(inputLine))
             {
-                Console.WriteLine($"{inputLine} is incorrect.");
+                throw new ValidationException($"{inputLine} is incorrect.");
                 Console.ReadKey();
                 return ReadString(message);
             }

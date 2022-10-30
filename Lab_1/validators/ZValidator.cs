@@ -6,18 +6,12 @@ using System.Threading.Tasks;
 
 namespace Lab_1.validation
 {
-    class ZValidator : IArgsValidator<int>
+    class ZValidator : IValidator<int>
     {
-        public bool IsValid(int z, out string? errorMessage)
+        public void IsValid(int z)
         {
             if (z == 0)
-            {
-                errorMessage = "z cannot be equal to zero.";
-                return false;
-            }
-
-            errorMessage = null;
-            return true;
+                throw new ValidationException("z cannot be equal to zero.");
         }
     }
 }

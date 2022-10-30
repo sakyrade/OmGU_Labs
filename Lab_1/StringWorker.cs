@@ -19,28 +19,21 @@ namespace Lab_1
 
             return reverseStringBuilder.ToString();
         }
-        public static bool IsEqual(string firstString, string secondString, out string? message)
+        public static void IsEqual(string firstString, string secondString)
         {
-            message = $"{firstString} is not equal {secondString}.";
-
-            if (firstString.Equals(secondString, StringComparison.CurrentCulture))
-            {
-                message = $"{firstString} is equal {secondString}.";
-                return true;
-            }
-
-            return false;
+            if (!firstString.Equals(secondString, StringComparison.CurrentCulture))
+                throw new ValidationException($"{firstString} is not equal {secondString}.");
         }
-        public static string IsReverse(string firstString, string secondString)
+        public static void IsReverse(string firstString, string secondString)
         {
-            if (Reverse(firstString).Equals(secondString, StringComparison.CurrentCulture)) return $"{firstString} is a reverse {secondString}.";
-            return $"{firstString} is not reverse {secondString}.";
+            if (!Reverse(firstString).Equals(secondString, StringComparison.CurrentCulture))
+                throw new ValidationException($"{firstString} is not reverse {secondString}.");
         }
         public static string NormalizeString(string str) => str.ToLower().Trim().Replace("  ", " ");
-        public static string IsRegexValid(string str, IRegexString regexString)
+        public static void IsRegexValid(string str, RegexValidator regexValidator)
         {
-            if (Regex.IsMatch(str, regexString.RegexString)) return str + regexString.SuccessMessage;
-            return str + regexString.FailureMessage;
+            if (!regexValidator.IsValid(str))
+                throw new ValidationException(str + " is not " + regexValidator.ToString() + '.');
         }
     }
 }

@@ -18,29 +18,72 @@ namespace Lab_1.menu_tasks
 
             Console.WriteLine("----------- Strings Analysis -----------\n");
 
-            bool isEqual = StringWorker.IsEqual(firstString, secondString, out string? messageIsEqual);
+            CheckEqual(firstString, secondString);
 
-            Console.WriteLine(messageIsEqual + '\n');
+            firstString = StringWorker.NormalizeString(firstString);
+            secondString = StringWorker.NormalizeString(secondString);
 
-            if (isEqual)
+            Console.WriteLine($"Normalize first string: {firstString}.");
+            Console.WriteLine($"Normalize second string: {secondString}.\n");
+
+            CheckEqual(firstString, secondString);
+
+            CheckReverse(firstString, secondString);
+
+            List<RegexValidator> regexValidators = new List<RegexValidator>()
             {
-                firstString = StringWorker.NormalizeString(firstString);
-                secondString = StringWorker.NormalizeString(secondString);
+                { new EmailRegexString() },
+                { new PhoneNumberRegexString() },
+                { new IPv4AddressRegexString() },
+                { new IPv6AddressRegexString() }
+            };
 
-                Console.WriteLine($"Normalize first string: {firstString}.");
-                Console.WriteLine($"Normalize second string: {secondString}.\n");
+            string[] inputStrings = new string[]
+            {
+                firstString,
+                secondString
+            };
+
+            foreach (var regexValidator in regexValidators)
+            {
+                for (int i = 0; i < 2; i++)
+                {
+                    try
+                    {
+                        StringWorker.IsRegexValid(inputStrings[i], regexValidator);
+                        Console.WriteLine(inputStrings[i] + " is " + regexValidator.ToString() + '.');
+                    }
+                    catch (ValidationException validException)
+                    {
+                        Console.WriteLine(validException.Message);
+                    }
+                }
             }
+        }
 
-            Console.WriteLine(StringWorker.IsReverse(firstString, secondString) + '\n');
-
-            Console.WriteLine(StringWorker.IsRegexValid(firstString, new EmailRegexString()));
-            Console.WriteLine(StringWorker.IsRegexValid(secondString, new EmailRegexString()) + '\n');
-            Console.WriteLine(StringWorker.IsRegexValid(firstString, new PhoneNumberRegexString()));
-            Console.WriteLine(StringWorker.IsRegexValid(secondString, new PhoneNumberRegexString()) + '\n');
-            Console.WriteLine(StringWorker.IsRegexValid(firstString, new IPv4AddressRegexString()));
-            Console.WriteLine(StringWorker.IsRegexValid(secondString, new IPv4AddressRegexString()) + '\n');
-            Console.WriteLine(StringWorker.IsRegexValid(firstString, new IPv6AddressRegexString()));
-            Console.WriteLine(StringWorker.IsRegexValid(secondString, new IPv6AddressRegexString()));
+        private void CheckEqual(string firstString, string secondString)
+        {
+            try
+            {
+                StringWorker.IsEqual(firstString, secondString);
+                Console.WriteLine($"{firstString} and {secondString} is equal.");
+            }
+            catch (ValidationException validException)
+            {
+                Console.WriteLine(validException.Message);
+            }
+        }
+        private void CheckReverse(string firstString, string secondString)
+        {
+            try
+            {
+                StringWorker.IsReverse(firstString, secondString);
+                Console.WriteLine($"{firstString} is reverse {secondString}.");
+            }
+            catch (ValidationException validException)
+            {
+                Console.WriteLine(validException.Message);
+            }
         }
     }
 }

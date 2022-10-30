@@ -41,7 +41,6 @@ namespace Lab_1
             Console.Clear();
             Console.WriteLine("[0] Exit");
             foreach (int key in idMenuOptionsPairs.Keys) Console.WriteLine($"[{key}] {idMenuOptionsPairs[key].Title}");
-            Console.Write("> ");
         }
     }
 }

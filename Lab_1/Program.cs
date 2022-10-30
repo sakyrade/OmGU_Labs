@@ -1,4 +1,5 @@
 ﻿using Lab_1.menu_tasks;
+using Lab_1.safe_readers;
 
 namespace Lab_1
 {
@@ -16,11 +17,7 @@ namespace Lab_1
             {
                 menu.PrintMenu();
 
-                if (!int.TryParse(Console.ReadLine(), out int menuOption))
-                {
-                    menuOption = -1;
-                    continue;
-                }
+                int menuOption = ReadInteger.Read("> ");
 
                 menu.ChoiceMenuOption(menuOption);
             }

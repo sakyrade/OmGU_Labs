@@ -13,9 +13,9 @@ namespace Lab_1.menu_tasks
         public CalcTask() => Title = "Calc: (Y - sqrt(X)) / Z";
         public override void Execute()
         {
-            int x = ReadFormulaArgs.Read("Input x: ", new XValidator());
-            int y = ReadFormulaArgs.Read("Input y: ");
-            int z = ReadFormulaArgs.Read("Input z: ", new ZValidator());
+            int x = ReadInteger.Read("Input x: ", new XValidator());
+            int y = ReadInteger.Read("Input y: ");
+            int z = ReadInteger.Read("Input z: ", new ZValidator());
             Console.WriteLine($"({y} - sqrt({x})) / {z} = {Calc(x, y, z)}");
         }
         private static double Calc(int x, int y, int z) => Math.Round((y - Math.Sqrt(x)) / z, 3);

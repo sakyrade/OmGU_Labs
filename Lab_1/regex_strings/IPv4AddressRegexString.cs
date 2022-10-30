@@ -6,14 +6,9 @@ using System.Threading.Tasks;
 
 namespace Lab_1.regex_strings
 {
-    class IPv4AddressRegexString : IRegexString
+    class IPv4AddressRegexString : RegexValidator
     {
-        public string RegexString { get; } = @"(\b25[0-5]|\b2[0-4][0-9]|\b[01]?[0-9][0-9]?)(\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}";
-
-        public string SuccessMessage { get; } = " is IPv4 address.";
-
-        public string FailureMessage { get; } = " is not IPv4 address";
-
-        public IPv4AddressRegexString() { }
+        public IPv4AddressRegexString() : base(@"(\b25[0-5]|\b2[0-4][0-9]|\b[01]?[0-9][0-9]?)(\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}") { }
+        public override string ToString() => "IPv4 Address";
     }
 }

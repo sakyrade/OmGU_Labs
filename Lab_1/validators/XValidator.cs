@@ -6,18 +6,12 @@ using System.Threading.Tasks;
 
 namespace Lab_1.validation
 {
-    class XValidator : IArgsValidator<int>
+    class XValidator : IValidator<int>
     {
-        public bool IsValid(int x, out string? errorMessage)
+        public void IsValid(int x)
         {
             if (x < 0)
-            {
-                errorMessage = "x can't be less zero.";
-                return false;
-            }
-
-            errorMessage = null;
-            return true;
+                throw new ValidationException("x can't be less zero.");
         }
     }
 }

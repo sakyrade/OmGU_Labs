@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Lab_1.validation
+namespace Lab_1
 {
-    interface IArgsValidator<T>
+    class ValidationException : Exception
     {
-        bool IsValid(T arg, out string? errorMessage);
+        public ValidationException(string message) : base(message) { }
     }
 }

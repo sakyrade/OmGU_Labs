@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 namespace Lab_1.regex_strings
 {
-    class EmailRegexString : IRegexString
+    class EmailRegexString : RegexValidator
     {
-        public string RegexString { get; } = @"[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+";
-        public string SuccessMessage { get; } = " is email address.";
-        public string FailureMessage { get; } = " is not email address.";
-        public EmailRegexString () { }
+        public EmailRegexString() : base(@"[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+") { }
+        public override string ToString() => "Email Address";
     }
 }
