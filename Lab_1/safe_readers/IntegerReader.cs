@@ -11,26 +11,6 @@ namespace Lab_1.safe_readers
     {
         public static int Read(string message)
         {
-            Console.Write(message);
-
-            int oldTopPosition = Console.GetCursorPosition().Top;
-            string? inputLine = Console.ReadLine();
-            if (!int.TryParse(inputLine, out int x))
-            {
-                Console.WriteLine($"{inputLine} is incorrect.");
-                Console.ReadKey();
-                Console.SetCursorPosition(0, Console.CursorTop - 2);
-                Console.WriteLine(new string(' ', Console.BufferWidth));
-                Console.WriteLine(new string(' ', Console.BufferWidth));
-                Console.SetCursorPosition(0, oldTopPosition);
-
-                return Read(message);
-            }
-
-            return x;
-        }
-        public static int Read(string message, IValidator<int> validator)
-        {
             int oldTopPosition = 0;
 
             try
@@ -44,8 +24,6 @@ namespace Lab_1.safe_readers
                 if (!int.TryParse(inputLine, out int x))
                     throw new ValidationException($"{inputLine} is incorrect.");
 
-                validator.IsValid(x);
-
                 return x;
             }
             catch (ValidationException validationEx)
@@ -57,7 +35,7 @@ namespace Lab_1.safe_readers
                 Console.WriteLine(new string(' ', Console.BufferWidth));
                 Console.SetCursorPosition(0, oldTopPosition);
 
-                return Read(message, validator);
+                return Read(message);
             }
         }
     }

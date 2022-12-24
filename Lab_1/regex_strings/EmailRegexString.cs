@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Lab_1.regex_strings
 {
-    class EmailRegexString : RegexValidator
+    public class EmailRegexString : RegexValidator
     {
         public EmailRegexString() : base(@"[^@ \t\r\n]+@[^@ \t\r\n]+\.[^@ \t\r\n]+") { }
         public override string ToString() => "Email Address";

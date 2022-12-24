@@ -7,30 +7,39 @@ using System.Threading.Tasks;
 
 namespace Lab_1.menu_tasks
 {
-    class StringsTask : Task
+    public delegate void StringsTaskHandler(string message);
+    public class StringsTask : Task
     {
-        public StringsTask() => Title = "Strings";
-
+        public event StringsTaskHandler? OnCheckCompleted;
+        public event TaskStartingHandler? OnTaskStarting;
+        public string FirstString { get; private set; }
+        public string SecondString { get; private set; }
+        public StringsTask() { }
+        public StringsTask(StringsTaskHandler? checkHandler,
+                           TaskStartingHandler? startHandler, string[] args = null) 
+        {
+            Title = "Strings";
+            OnCheckCompleted += checkHandler;
+            OnTaskStarting += startHandler;
+            Args = args;
+        }
         public override void Execute()
         {
-            string firstString = safe_readers.ReadStrings.ReadString("Input first string: ");
-            string secondString = safe_readers.ReadStrings.ReadString("Input second string: ");
+            OnTaskStarting?.Invoke(this);
 
-            Console.WriteLine("----------- Strings Analysis -----------\n");
+            OnCheckCompleted?.Invoke(CheckEqual(FirstString, SecondString));
 
-            CheckEqual(firstString, secondString);
+            FirstString = NormalizeString(FirstString);
+            SecondString = NormalizeString(SecondString);
 
-            firstString = StringWorker.NormalizeString(firstString);
-            secondString = StringWorker.NormalizeString(secondString);
+            OnCheckCompleted?.Invoke($"Normalize first string: {FirstString}.");
+            OnCheckCompleted?.Invoke($"Normalize first string: {SecondString}.");
 
-            Console.WriteLine($"Normalize first string: {firstString}.");
-            Console.WriteLine($"Normalize second string: {secondString}.\n");
+            OnCheckCompleted?.Invoke(CheckEqual(FirstString, SecondString));
 
-            CheckEqual(firstString, secondString);
+            OnCheckCompleted?.Invoke(CheckReverse(FirstString, SecondString));
 
-            CheckReverse(firstString, secondString);
-
-            List<RegexValidator> regexValidators = new List<RegexValidator>()
+            List<RegexValidator> regexValidators = new()
             {
                 { new EmailRegexString() },
                 { new PhoneNumberRegexString() },
@@ -40,50 +49,79 @@ namespace Lab_1.menu_tasks
 
             string[] inputStrings = new string[]
             {
-                firstString,
-                secondString
+                FirstString,
+                SecondString
             };
 
             foreach (var regexValidator in regexValidators)
+                foreach (string str in inputStrings)
+                    OnCheckCompleted?.Invoke(CheckRegex(str, regexValidator));
+        }
+        public void Init(string firstString, string secondString)
+        {
+            FirstString = firstString;
+            SecondString = secondString;
+        }
+        private static string CheckEqual(string firstString, string secondString)
+        {
+            try
             {
-                for (int i = 0; i < 2; i++)
-                {
-                    try
-                    {
-                        StringWorker.IsRegexValid(inputStrings[i], regexValidator);
-                        Console.WriteLine(inputStrings[i] + " is " + regexValidator.ToString() + '.');
-                    }
-                    catch (ValidationException validException)
-                    {
-                        Console.WriteLine(validException.Message);
-                    }
-                }
+                IsEqual(firstString, secondString);
+                return $"{firstString} and {secondString} is equal.";
+            }
+            catch (ValidationException validException)
+            {
+                return validException.Message;
             }
         }
+        private static string CheckReverse(string firstString, string secondString)
+        {
+            try
+            {
+                IsReverse(firstString, secondString);
+                return $"{firstString} is reverse {secondString}.";
+            }
+            catch (ValidationException validException)
+            {
+                return validException.Message;
+            }
+        }
+        private static string CheckRegex(string str, RegexValidator regexValidator)
+        {
+            try
+            {
+                IsRegexValid(str, regexValidator);
+                return str + " is " + regexValidator.ToString() + '.';
+            }
+            catch (ValidationException validException)
+            {
+                return validException.Message;
+            }
+        }
+        public static string Reverse(string str)
+        {
+            StringBuilder reverseStringBuilder = new StringBuilder();
 
-        private void CheckEqual(string firstString, string secondString)
-        {
-            try
-            {
-                StringWorker.IsEqual(firstString, secondString);
-                Console.WriteLine($"{firstString} and {secondString} is equal.");
-            }
-            catch (ValidationException validException)
-            {
-                Console.WriteLine(validException.Message);
-            }
+            for (int i = str.Length - 1; i >= 0; i--)
+                reverseStringBuilder.Append(str[i]);
+
+            return reverseStringBuilder.ToString();
         }
-        private void CheckReverse(string firstString, string secondString)
+        public static void IsEqual(string firstString, string secondString)
         {
-            try
-            {
-                StringWorker.IsReverse(firstString, secondString);
-                Console.WriteLine($"{firstString} is reverse {secondString}.");
-            }
-            catch (ValidationException validException)
-            {
-                Console.WriteLine(validException.Message);
-            }
+            if (!firstString.Equals(secondString, StringComparison.CurrentCulture))
+                throw new ValidationException($"{firstString} is not equal {secondString}.");
+        }
+        public static void IsReverse(string firstString, string secondString)
+        {
+            if (!Reverse(firstString).Equals(secondString, StringComparison.CurrentCulture))
+                throw new ValidationException($"{firstString} is not reverse {secondString}.");
+        }
+        public static string NormalizeString(string str) => str.ToLower().Trim().Replace("  ", " ");
+        public static void IsRegexValid(string str, RegexValidator regexValidator)
+        {
+            if (!regexValidator.IsValid(str))
+                throw new ValidationException(str + " is not " + regexValidator.ToString() + '.');
         }
     }
 }

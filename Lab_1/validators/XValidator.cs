@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Lab_1.validation
 {
-    class XValidator : IValidator<int>
+    static class XValidator
     {
-        public void IsValid(int x)
+        public static void IsValid(int x)
         {
             if (x < 0)
                 throw new ValidationException("x can't be less zero.");

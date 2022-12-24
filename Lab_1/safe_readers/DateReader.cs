@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Lab_1.safe_readers
 {
-    static class ReadDate
+    static class DateReader
     {
         public static (DateOnly, DateOnly) Read(string message)
         {

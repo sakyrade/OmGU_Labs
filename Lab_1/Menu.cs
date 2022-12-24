@@ -4,15 +4,13 @@ namespace Lab_1
 {
     class Menu
     {
-        public bool State { get; private set; }
         private Dictionary<int, menu_tasks.Task> idMenuOptionsPairs;
-
+        public bool State { get; private set; }
         public Menu()
         {
             idMenuOptionsPairs = new Dictionary<int, menu_tasks.Task>();
             State = true;
         }
-        
         public void AddMenuOption(int id, string title, ExecuteHandler execute) => idMenuOptionsPairs.Add(id, new DelegateTask(title, execute));
         public void AddMenuOption(int id, menu_tasks.Task menuOption) => idMenuOptionsPairs.Add(id, menuOption);
         public void ChoiceMenuOption(int menuOption)
@@ -32,10 +30,18 @@ namespace Lab_1
                 return;
             }
 
-            idMenuOptionsPairs[menuOption].Execute();
+            try
+            {
+                idMenuOptionsPairs[menuOption].Execute();
+            }
+            catch (ValidationException validErr)
+            {
+                Console.WriteLine(validErr.Message);
+            }
 
             Console.ReadKey();
         }
+
         public void PrintMenu()
         {
             Console.Clear();

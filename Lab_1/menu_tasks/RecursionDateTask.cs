@@ -7,26 +7,38 @@ using System.Threading.Tasks;
 
 namespace Lab_1.menu_tasks
 {
-    class RecursionDateTask : Task
+    public class RecursionDateTask : Task
     {
-        public RecursionDateTask() => Title = "Recursion date";
-
+        private event TaskCompletedHandler OnRecursionDateTaskCompleted;
+        private event TaskStartingHandler OnRecursionDateTaskStarting;
+        public (DateOnly, DateOnly) FirstDatePair { get; private set; }
+        public (DateOnly, DateOnly) SecondDatePair { get; private set; }
+        public int Result { get; private set; }
+        public RecursionDateTask() { }
+        public RecursionDateTask(TaskStartingHandler startHandler, TaskCompletedHandler completeHandler, string[] args = null)
+        {
+            Title = "Recursion date";
+            OnRecursionDateTaskStarting += startHandler;
+            OnRecursionDateTaskCompleted += completeHandler;
+            Args = args;
+        }
         public override void Execute()
         {
-            (DateOnly, DateOnly) firstDatePair = ReadDate.Read("Input the first date pair.");
-            (DateOnly, DateOnly) secondDatePair = ReadDate.Read("Input the second date pair.");
+            OnRecursionDateTaskStarting?.Invoke(this);
 
-            int dateSegment = CalcDateSegment(firstDatePair, secondDatePair);
+            int dateSegment = CalcDateSegment(FirstDatePair, SecondDatePair);
 
-            if (dateSegment == -1)
-            {
-                Console.WriteLine("The Ackerman function cannot be computed for m > 3 in the allotted time.");
-                return;
-            }
+            if (dateSegment != -1) Result = CalcAckermannFunction(dateSegment, 5);
+            else Result = dateSegment;
 
-            Console.WriteLine("Perform result the Ackermann Function: " + CalcAckermannFunction(dateSegment, 5));
+            OnRecursionDateTaskCompleted?.Invoke(this);
         }
-        private static int CalcDateSegment((DateOnly, DateOnly) firstDatePair, (DateOnly, DateOnly) secondDatePair)
+        public void Init((DateOnly, DateOnly) firstDatePair, (DateOnly, DateOnly) secondDatePair)
+        {
+            FirstDatePair = firstDatePair;
+            SecondDatePair = secondDatePair;
+        }
+        public static int CalcDateSegment((DateOnly, DateOnly) firstDatePair, (DateOnly, DateOnly) secondDatePair)
         {
             if (firstDatePair.Item1.Year != secondDatePair.Item1.Year || firstDatePair.Item2.Year != secondDatePair.Item2.Year ||
                 firstDatePair.Item1.Month != secondDatePair.Item1.Month || firstDatePair.Item2.Month != secondDatePair.Item2.Month) return 0;
@@ -50,7 +62,7 @@ namespace Lab_1.menu_tasks
 
             return m;
         }
-        private static int CalcAckermannFunction(int m, int n)
+        public static int CalcAckermannFunction(int m, int n)
         {
             if (m == 0) return n + 1;
 

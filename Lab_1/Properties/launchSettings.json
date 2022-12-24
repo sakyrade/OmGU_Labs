@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Lab_1": {
+      "commandName": "Project",
+      "commandLineArgs": "-mi 3 -d1st 12.12.2022 -d1end 15.12.2022 -d2st 13.12.2022 -d2end 16.12.2022"
+    }
+  }
+}

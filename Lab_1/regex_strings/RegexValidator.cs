@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Lab_1.regex_strings
 {
-    abstract class RegexValidator
+    public abstract class RegexValidator
     {
         private string regexString;
 
